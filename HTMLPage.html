@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Node.js Programming</title>
+    <style>
+        .line {
+            overflow: hidden;
+        }
+        .seat{
+            margin: 2px;
+            float: left;
+            width: 30px;
+            height: 30px;
+            border-radius: 3px;
+        }
+        .enable{
+             background: gray;
+        }
+        .enable:hover{
+            background: black;
+        }
+        .disable{
+            background: red;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- 소켓 생성 -->
+    <script>
+        // 소켓 이벤트 수행
+        var socket = io.connect();
+        
+        // 이벤트 연결
+        socket.on('reverse', function(data){
+            var $target = $('div[data-x=' + data.x + '][data-y=' + data.y + ']');
+            $target.removeClass('enable');
+            $target.addClass('disable');
+        });
+    </script>
+    <!--초기 좌석 생성-->
+    <script>
+        $(document).ready(function(){
+            // 변수 선언
+            var onClickSeat = function(){
+                var x = $(this).attr('data-x');
+                var y = $(this).attr('data-y');
+                var check = $(this).context.className;
+                if(check == 'seat enable'){
+                    if(confirm('좌석을 예약하시겟습니까?')){
+                        $(this).off('click');
+                        $.getJSON('/updateSeat',{x:x, y:y}, function(data){
+                            socket.emit('reverse', {
+                                x:x,
+                                y:y
+                            });
+                            if(data.affectedRows <= 1){
+                                alert("예매가 완료되었습니다.");
+                            }
+                        });
+                    } else {
+                        alert("취소되엇습니다.");
+                    }
+                }else if(check == 'seat disable'){
+                    if(confirm('좌석을 취소하시겟습니까?')){
+                        $(this).off('click');
+                        $.getJSON('/updateSeat2',{x:x, y:y}, function(data){
+                            socket.emit('reverse', {
+                                x:x,
+                                y:y
+                            });
+                            if(data.affectedRows <= 1){
+                                alert("예매취소 완료되었습니다.");
+                            }
+                            
+                        })
+                    }
+                }
+            };
+            // Ajax 수행
+            $.getJSON('/seats',{ dummy: new Date().getTime()}, function(data){
+                //좌석을 생성
+                console.log(data);
+                $.each(data, function(indexY, line){
+                    //문서 객체 생성
+                    var $line = $('<div></div>').addClass('line');
+                    $.each(line, function (indexX, seat){
+                        // 문서 객체 생성 변수 $line에 추가
+                        var $output = $('<div></div>',{
+                            'class':'seat',
+                            'data-x':indexY,
+                            'data-y':indexX
+                        }).appendTo($line);
+                        console.log(seat);
+                        if(seat == 1){
+                            //좌석이 비어 있으면 enable 클래스와 click 리스터 추가
+                            $output.addClass('enable').on('click', onClickSeat);
+                        }else if(seat == 2){
+                            $output.addClass('disable').on('click', onClickSeat);
+                        }
+                    });
+                    // 문서 객체를 추가
+                    $line.appendTo('body');
+                })
+            })
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
