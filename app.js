@@ -47,7 +47,7 @@ var server = http.createServer(app);
 
 // 라우트 실행
 app.get('/', function(request, response, next){
-    fs.readFile('theater.html', function(error, data){
+    fs.readFile('HTMLPage.html', function(error, data){
         response.send(data.toString());
     });
 });
@@ -82,7 +82,6 @@ app.get('/updateSeat2', function(request, response){
         if(err){
             console.log(err);
         }
-        console.log("완료");
         response.send(result);
     });
     connection.end();

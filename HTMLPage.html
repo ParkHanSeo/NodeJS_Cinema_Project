@@ -22,6 +22,13 @@
         .disable{
             background: red;
         }
+        table, td, th {
+            border-collapse : collapse;
+            border : 1px solid black;
+            margin : auto;
+            width: 280px;
+            height: 50px;
+        };
     </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -83,6 +90,7 @@
                 $.each(data, function(indexY, line){
                     //문서 객체 생성
                     var $line = $('<div></div>').addClass('line');
+                    var $div = $('<div></div>').addClass('check');
                     $.each(line, function (indexX, seat){
                         // 문서 객체 생성 변수 $line에 추가
                         var $output = $('<div></div>',{
@@ -100,12 +108,97 @@
                     });
                     // 문서 객체를 추가
                     $line.appendTo('body');
+                    console.log($line)
+                    $("div[class='seatDiv").append($line)
                 })
             })
+            $.getJSON('/moiveList',{}, function(data){
+                
+            });
         });
     </script>
 </head>
 <body>
-    
+    <div style="width: 50%; float: left; box-sizing: border-box;">
+        <div style="width: 33%; float: left; box-sizing: border-box; text-align: center;">
+            <h3>영화목록</h3>
+            <table style="border-collapse : collapse; border : 1px solid black;">
+                <tr>
+                    <td>명량</td>
+                </tr>
+                <tr>
+                    <td>극한직업</td>
+                </tr>
+                <tr>
+                    <td>신과함께-죄와 벌</td>
+                </tr>
+                <tr>
+                    <td>국제시장</td>
+                </tr>
+                <tr>
+                    <td>베테랑</td>
+                </tr>
+                <tr>
+                    <td>괴물</td>
+                </tr>
+                <tr>
+                    <td>도둑들</td>
+                </tr>
+            </table>
+        </div>
+        <div style="width: 33%; float: left; box-sizing: border-box; text-align: center;">
+            <h3>상영관</h3>
+            <table style="border-collapse : collapse; border : 1px solid black;">
+                <tr>
+                    <td>1관</td>
+                </tr>
+                <tr>
+                    <td>2관</td>
+                </tr>
+                <tr>
+                    <td>3관</td>
+                </tr>
+                <tr>
+                    <td>4관</td>
+                </tr>
+                <tr>
+                    <td>5관</td>
+                </tr>
+                <tr>
+                    <td>6관</td>
+                </tr>
+                <tr>
+                    <td>7관</td>
+                </tr>                
+            </table>            
+        </div>
+        <div style="width: 33%; float: left; box-sizing: border-box; text-align: center;">
+            <h3>상영시간</h3>
+            <table style="border-collapse : collapse; border : 1px solid black;">
+                <tr>
+                    <td>2022-11-11</td>
+                </tr>
+                <tr>
+                    <td>2022-11-12</td>
+                </tr>
+                <tr>
+                    <td>2022-11-13</td>
+                </tr>
+                <tr>
+                    <td>2022-11-14</td>
+                </tr>
+                <tr>
+                    <td>2022-11-15</td>
+                </tr>
+                <tr>
+                    <td>2022-11-16</td>
+                </tr>
+                <tr>
+                    <td>2022-11-17</td>
+                </tr>                
+            </table>            
+        </div>        
+    </div>
+    <div class="seatDiv" style="width: 50%; float: right; box-sizing: border-box;"></div>
 </body>
 </html>
